@@ -1,6 +1,7 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
+import About from './pages/About';
 // Import other pages as needed (you'll create these later)
 // import AboutPage from './pages/AboutPage';
 // import ProjectsPage from './pages/ProjectsPage';
@@ -24,6 +25,7 @@ function App() {
         </main>
         {/* You can add a footer here later */}
       </div>
+      <div>About</div>
     </Router>
   );
 }
