@@ -1,30 +1,13 @@
-// src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-// Import other pages as needed (you'll create these later)
-// import AboutPage from './pages/AboutPage';
-// import ProjectsPage from './pages/ProjectsPage';
-// import ContactPage from './pages/ContactPage';
+// src/App.jsx - TEMPORARY TEST VERSION
+import React from 'react';
+import HeroSection from './components/sections/HeroSection';
 
 function App() {
   return (
-    <Router>
-      <div className="app">
-        {/* You can add a navbar here later */}
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            {/* Add more routes as you create more pages */}
-            {/* <Route path="/about" element={<AboutPage />} /> */}
-            {/* <Route path="/projects" element={<ProjectsPage />} /> */}
-            {/* <Route path="/contact" element={<ContactPage />} /> */}
-            {/* Add a catch-all route for 404 pages */}
-            {/* <Route path="*" element={<NotFoundPage />} /> */}
-          </Routes>
-        </main>
-        {/* You can add a footer here later */}
-      </div>
-    </Router>
+    <div className="app">
+      <h1>Test - Portfolio Loading</h1>
+      <HeroSection />
+    </div>
   );
 }
 
