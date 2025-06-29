@@ -1,14 +1,16 @@
 /* src/styles/globals.css */
 :root {
-  /* Light Mode Colors */
-  --primary-color: #646cff;
-  --secondary-color: #535bf2;
+  /* Light Mode Colors - Baby Blue Theme */
+  --primary-color: #4A90E2;        /* Main baby blue */
+  --secondary-color: #357ABD;      /* Darker blue for hover states */
+  --accent-color: #87CEEB;         /* Light baby blue for accents */
   --bg-color: #ffffff;
-  --text-color: #213547;
-  --text-light: #666;
-  --border-color: #e0e0e0;
-  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --text-color: #2c3e50;           /* Dark blue-gray for good contrast */
+  --text-light: #5a6c7d;          /* Lighter blue-gray */
+  --border-color: #e3f2fd;        /* Very light blue */
+  --shadow: 0 2px 10px rgba(74, 144, 226, 0.15);
   --header-bg: rgba(255, 255, 255, 0.95);
+  --section-alt-bg: #f8fcff;      /* Very light blue background */
   
   /* Spacing (same for both modes) */
   --section-padding: 80px 0;
@@ -16,17 +18,19 @@
   --header-height: 70px;
 }
 
-/* Dark Mode Colors */
+/* Dark Mode Colors - Baby Blue Theme */
 [data-theme="dark"] {
-  --bg-color: #1a1a1a;
-  --text-color: rgba(255, 255, 255, 0.87);
-  --text-light: #aaa;
-  --border-color: #333;
-  --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  --header-bg: rgba(26, 26, 26, 0.95);
+  --primary-color: #87CEEB;        /* Lighter baby blue for dark mode */
+  --secondary-color: #4A90E2;      /* Standard baby blue */
+  --accent-color: #b3d9f2;        /* Even lighter blue */
+  --bg-color: #0f1419;            /* Very dark blue-black */
+  --text-color: #e8f4f8;          /* Light blue-white */
+  --text-light: #a8c8e1;          /* Light blue-gray */
+  --border-color: #1e3a5f;        /* Dark blue */
+  --shadow: 0 2px 10px rgba(135, 206, 235, 0.2);
+  --header-bg: rgba(15, 20, 25, 0.95);
+  --section-alt-bg: #1a2332;      /* Dark blue-gray */
 }
-
-/* Rest of your existing CSS stays the same... */
 
 /* Global Reset */
 * {
@@ -40,6 +44,7 @@ body {
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--bg-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Container for consistent width */
@@ -55,6 +60,12 @@ section {
   min-height: 100vh;
   display: flex;
   align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+/* Alternate section backgrounds for visual separation */
+section:nth-child(even) {
+  background-color: var(--section-alt-bg);
 }
 
 section h2 {
@@ -62,24 +73,35 @@ section h2 {
   margin-bottom: 2rem;
   text-align: center;
   color: var(--primary-color);
+  font-weight: 700;
+}
+
+section p {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+  text-align: center;
 }
 
 /* Button Styles */
 .button {
   display: inline-block;
   padding: 12px 24px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
   margin: 0 8px;
+  font-size: 1rem;
 }
 
 .primary-button {
   background-color: var(--primary-color);
   color: white;
+  border: 2px solid var(--primary-color);
 }
 
 .secondary-button {
@@ -88,9 +110,121 @@ section h2 {
   background: transparent;
 }
 
-.button:hover {
+.primary-button:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
   transform: translateY(-2px);
   box-shadow: var(--shadow);
+}
+
+.secondary-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* Hero Section Specific Styles */
+.hero-section {
+  background: linear-gradient(135deg, var(--bg-color) 0%, var(--section-alt-bg) 100%);
+}
+
+.hero-section h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+  font-weight: 800;
+}
+
+.hero-section h2 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.hero-buttons {
+  margin-top: 2rem;
+}
+
+/* Contact Section Styles */
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.contact-item {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 10px;
+  background-color: var(--section-alt-bg);
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+
+.contact-item h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.social-links a {
+  color: var(--primary-color);
+  text-decoration: none;
+  margin: 0 0.5rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: var(--secondary-color);
+}
+
+/* Resume Section Styles */
+.resume-actions {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.resume-button {
+  display: inline-block;
+  padding: 12px 24px;
+  margin: 0 10px;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid var(--primary-color);
+}
+
+.resume-button:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.resume-viewer {
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+.resume-iframe {
+  width: 100%;
+  height: 600px;
+  border: none;
 }
 
 /* Responsive Design */
@@ -105,5 +239,21 @@ section h2 {
   
   section h2 {
     font-size: 2rem;
+  }
+  
+  .hero-section h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .contact-info {
+    grid-template-columns: 1fr;
+  }
+  
+  .resume-iframe {
+    height: 500px;
   }
 }

@@ -1,5 +1,6 @@
 // src/components/layout/Header.jsx
 import React from 'react';
+import DarkModeToggle from './DarkModeToggle';
 import '../../styles/Header.css';
 
 function Header() {
@@ -56,6 +57,8 @@ function Header() {
             </li>
           </ul>
         </nav>
+        
+        <DarkModeToggle />
       </div>
     </header>
   );
