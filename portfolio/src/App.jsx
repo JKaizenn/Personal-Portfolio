@@ -1,12 +1,22 @@
-// src/App.jsx - TEMPORARY TEST VERSION
+// src/App.jsx
 import React from 'react';
+import Header from './components/layout/Header';
 import HeroSection from './components/sections/HeroSection';
+import AboutSection from './components/sections/AboutSection';
+import ResumeSection from './components/sections/ResumeSection';
+import ContactSection from './components/sections/ContactSection';
+import './styles/globals.css';
 
 function App() {
   return (
     <div className="app">
-      <h1>Test - Portfolio Loading</h1>
-      <HeroSection />
+      <Header />
+      <main className="main-content">
+        <HeroSection />
+        <AboutSection />
+        <ResumeSection />
+        <ContactSection />
+      </main>
     </div>
   );
 }
