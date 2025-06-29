@@ -1,17 +1,35 @@
 // src/components/sections/ResumeSection.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function ResumeSection() {
   const [showFullPdf, setShowFullPdf] = useState(false);
   const [pdfError, setPdfError] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handlePdfError = () => {
     setPdfError(true);
   };
 
   const togglePdfView = () => {
-    setShowFullPdf(!showFullPdf);
+    setIsTransitioning(true);
+    
+    // Add small delay for smooth transition
+    setTimeout(() => {
+      setShowFullPdf(!showFullPdf);
+      setPdfError(false); // Reset error state when toggling
+      setIsTransitioning(false);
+    }, 150);
   };
+
+  // Reset error state when component mounts
+  useEffect(() => {
+    setPdfError(false);
+  }, []);
+
+  // PDF URL with parameters to force PDF display
+  const pdfUrl = `${window.location.origin}/resume.pdf`;
+  const pdfEmbedUrl = `${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
+  const pdfFullUrl = `${pdfUrl}#toolbar=1&navpanes=1&scrollbar=1&view=FitH`;
 
   return (
     <section id="resume" className="resume-section">
@@ -26,7 +44,7 @@ function ResumeSection() {
             {/* Action Buttons */}
             <div className="resume-actions">
               <a 
-                href="/resume.pdf" 
+                href={pdfUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="resume-button view-button"
@@ -35,7 +53,7 @@ function ResumeSection() {
                 View Full Resume
               </a>
               <a 
-                href="/resume.pdf" 
+                href={pdfUrl} 
                 download="Jessen_Resume.pdf"
                 className="resume-button download-button"
               >
@@ -44,20 +62,21 @@ function ResumeSection() {
               </a>
               <button 
                 onClick={togglePdfView}
-                className="resume-button toggle-button"
+                className={`resume-button toggle-button ${isTransitioning ? 'transitioning' : ''}`}
+                disabled={isTransitioning}
               >
                 <span className="button-icon">
-                  {showFullPdf ? '🔼' : '🔽'}
+                  {isTransitioning ? '⏳' : (showFullPdf ? '🔼' : '🔽')}
                 </span>
-                {showFullPdf ? 'Hide Preview' : 'Show Preview'}
+                {isTransitioning ? 'Loading...' : (showFullPdf ? 'Hide Preview' : 'Show Preview')}
               </button>
             </div>
 
-            {/* PDF Preview Container */}
-            <div className="resume-preview-container">
+            {/* PDF Preview Container with smooth transitions */}
+            <div className={`resume-preview-container ${isTransitioning ? 'transitioning' : ''}`}>
               {!showFullPdf ? (
                 // Thumbnail Preview
-                <div className="resume-thumbnail" onClick={togglePdfView}>
+                <div className={`resume-thumbnail ${isTransitioning ? 'fade-out' : 'fade-in'}`} onClick={togglePdfView}>
                   <div className="thumbnail-overlay">
                     <div className="thumbnail-content">
                       <div className="thumbnail-icon">📄</div>
@@ -70,22 +89,55 @@ function ResumeSection() {
                     </div>
                   </div>
                   
-                  {/* Actual PDF Thumbnail (first page only) */}
-                  <iframe
-                    src="/resume.pdf#page=1&view=Fit&toolbar=0&navpanes=0&scrollbar=0"
-                    title="Resume Thumbnail"
-                    className="resume-thumbnail-frame"
-                    onError={handlePdfError}
-                  />
+                  {/* PDF Thumbnail with error handling */}
+                  {!pdfError ? (
+                    <iframe
+                      src={pdfEmbedUrl}
+                      title="Resume Thumbnail"
+                      className="resume-thumbnail-frame"
+                      onError={handlePdfError}
+                      onLoad={(e) => {
+                        // Check if iframe loaded successfully
+                        try {
+                          const iframe = e.target;
+                          // If iframe content is empty or shows error, fallback
+                          if (!iframe.contentDocument && !iframe.contentWindow) {
+                            handlePdfError();
+                          }
+                        } catch (error) {
+                          handlePdfError();
+                        }
+                      }}
+                    />
+                  ) : (
+                    // Fallback thumbnail
+                    <div className="pdf-thumbnail-fallback">
+                      <div className="fallback-thumbnail-content">
+                        <div className="fallback-icon">📄</div>
+                        <h3>Resume Preview</h3>
+                        <p>PDF preview not available in this browser</p>
+                        <div className="fallback-buttons">
+                          <a 
+                            href={pdfUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="button button-primary"
+                          >
+                            View PDF
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 // Full PDF Viewer
-                <div className="resume-viewer-full">
+                <div className={`resume-viewer-full ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
                   <div className="pdf-viewer-header">
                     <h3>Resume Preview</h3>
                     <div className="pdf-controls">
                       <a 
-                        href="/resume.pdf" 
+                        href={pdfUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="pdf-control-btn"
@@ -97,6 +149,7 @@ function ResumeSection() {
                         onClick={togglePdfView}
                         className="pdf-control-btn"
                         title="Close preview"
+                        disabled={isTransitioning}
                       >
                         ✕
                       </button>
@@ -106,20 +159,31 @@ function ResumeSection() {
                   <div className="pdf-viewer-container">
                     {!pdfError ? (
                       <iframe
-                        src="/resume.pdf#toolbar=1&navpanes=1&scrollbar=1"
+                        key={showFullPdf ? 'full' : 'thumb'} // Force re-render
+                        src={pdfFullUrl}
                         title="Jessen Resume"
                         className="resume-iframe-full"
                         onError={handlePdfError}
+                        onLoad={(e) => {
+                          try {
+                            const iframe = e.target;
+                            if (!iframe.contentDocument && !iframe.contentWindow) {
+                              handlePdfError();
+                            }
+                          } catch (error) {
+                            handlePdfError();
+                          }
+                        }}
                       />
                     ) : (
                       <div className="pdf-fallback">
                         <div className="fallback-content">
                           <div className="fallback-icon">📄</div>
                           <h3>PDF Preview Unavailable</h3>
-                          <p>Your browser doesn't support PDF viewing.</p>
+                          <p>Your browser doesn't support PDF viewing or the PDF couldn't be loaded.</p>
                           <div className="fallback-actions">
                             <a 
-                              href="/resume.pdf" 
+                              href={pdfUrl} 
                               target="_blank" 
                               rel="noopener noreferrer"
                               className="button button-primary"
@@ -127,7 +191,7 @@ function ResumeSection() {
                               Open PDF in New Tab
                             </a>
                             <a 
-                              href="/resume.pdf" 
+                              href={pdfUrl} 
                               download="Jessen_Resume.pdf"
                               className="button button-secondary"
                             >
